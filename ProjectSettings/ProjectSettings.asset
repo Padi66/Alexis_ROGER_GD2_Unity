@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 28
-  productGUID: d0850f13c101d0449b369b1698d758f7
+  productGUID: 8b3d93be5f479c4449529978d0bbf44d
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -273,9 +273,6 @@ PlayerSettings:
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1
-  androidAppCategory: 3
-  useAndroidAppCategory: 1
-  androidAppCategoryOther: 
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
@@ -919,11 +916,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: af4dbbcb-ab9d-425d-b5a1-400b4033ceb1
+  cloudProjectId: d655ec9a-0c82-46ba-a769-34083e657ad5
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: Cours_GD2_Unity
-  organizationId: padi6613ar
+  organizationId: gilbert_demorgny
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
