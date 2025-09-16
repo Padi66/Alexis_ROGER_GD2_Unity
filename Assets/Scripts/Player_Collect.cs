@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class Player_Collect : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    [SerializeField] private ScoreDatas _scoreDatas;
 
-    // Update is called once per frame
-    void Update()
+    public void UpdateScore(int value)
     {
-        
+        _scoreDatas.ScoreValue = Mathf.Clamp(_scoreDatas.ScoreValue + value,min:0, max:_scoreDatas.ScoreValue + value);
     }
 }
