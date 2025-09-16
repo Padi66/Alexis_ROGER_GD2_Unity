@@ -5,6 +5,10 @@ public class TargetHard : MonoBehaviour
 {
     private void OnCollisionEnter(Collision other)
     {
-        Destroy(gameObject);
+        if (other.gameObject.GetComponent<Player_Collect>() != null)
+        {
+            Destroy(gameObject);
+            
+        }
     }
 }
