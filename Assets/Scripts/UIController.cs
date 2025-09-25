@@ -4,6 +4,18 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private TMP_Text _scoreText;
+
+    private void OnEnable()
+    {
+        Player_Collect.OnTargetColleted += UpdateScore;
+    }
+
+    private void OnDisable()
+    {
+        Player_Collect.OnTargetColleted -= UpdateScore;
+    }
+    
+    
     private void Star()
     {
         UpdateScore(0);
@@ -14,4 +26,5 @@ public class UIController : MonoBehaviour
         //_scoreText.text = $"Score : {newScore.ToString()}";
         
     }
+    
 }
