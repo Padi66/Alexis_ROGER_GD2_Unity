@@ -8,11 +8,13 @@ public class CardInventoryUI : MonoBehaviour
     private void OnEnable()
     {
         InventoryManager.OnCardCollected += UpdateCardDisplay;
+        InventoryManager.OnCardRemoved += UpdateCardDisplay;
     }
     
     private void OnDisable()
     {
         InventoryManager.OnCardCollected -= UpdateCardDisplay;
+        InventoryManager.OnCardRemoved -= UpdateCardDisplay;
     }
     
     private void Start()

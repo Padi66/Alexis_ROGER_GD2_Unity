@@ -4,56 +4,68 @@ using UnityEngine;
 
 public class TargetSoft : MonoBehaviour
 {
-   [SerializeField] private int _targetValue = 1;
-   [SerializeField] private float _shadowDuration = 3f;
-   [SerializeField] private GameObject _particleEffect;
-   private float _shadowTimer = 0f;
-   private bool _isInShadows = false;
-   private void OnTriggerEnter(Collider other)
-   {
-      if (other.gameObject.GetComponent<Player_Collect>() != null)
-      {
-         other.gameObject.GetComponent<Player_Collect>().UpdateScore(_targetValue);
-         //Destroy(gameObject);
-         //TODO : hide Target
-         ToggleVisibility(false);
-         //TODO : Start Timer
-         //_isInShadows = true;
-         //Instantiate(_particleEffect.transform.position Quaternion.identity);
-         StartCoroutine(routine: ShadowTimerControl());
-      }
-   }
-
-   private void ToggleVisibility(bool newVisibility)
-   {
-      GetComponent<MeshRenderer>().enabled = newVisibility;
-      GetComponent<Collider>().enabled = newVisibility;
-   }
-   //TODO: Timer by deltatime
-   /*private void Update()
-   {
-      if (_isInShadows)
-      {
-         _shadowTimer += Time.deltaTime;
-         if (_shadowTimer >= _shadowDuration)
-         {
-            //TODO: Show Target
-            ToggleVisibility(true);
-            //TODO: Stop Timer
-            _shadowTimer = 0f;
-            _isInShadows = false;
+    [SerializeField] private int _targetValue = 1;
+    [SerializeField] private float _shadowDuration = 3f;
+    [SerializeField] private GameObject _particleEffect;
+    
+    private MeshRenderer _meshRenderer;
+    private Collider _collider;
+    private bool _canCollect = true;
+    private Coroutine _respawnCoroutine;
+    
+    private void Start()
+    {
+        _meshRenderer = GetComponent<MeshRenderer>();
+        _collider = GetComponent<Collider>();
+        
+        if (_collider != null && !_collider.isTrigger)
+        {
+            _collider.isTrigger = true;
         }
-      
-      }
-            
-    }*/
-   
-   //TODO : Timer by coroutine
-   private IEnumerator ShadowTimerControl()
-   {
-      //yield return new WaitForEndOfFrame()
-      yield return new WaitForSeconds(_shadowDuration);
-      ToggleVisibility(true);
-   }
+    }
+    
+    private void OnTriggerEnter(Collider other)
+    {
+        if (!_canCollect) return;
+        
+        if (other.CompareTag("Player"))
+        {
+            Player_Collect playerCollect = other.GetComponent<Player_Collect>();
+            if (playerCollect != null)
+            {
+                playerCollect.UpdateScore(_targetValue);
+                
+                if (_respawnCoroutine != null)
+                {
+                    StopCoroutine(_respawnCoroutine);
+                }
+                
+                _respawnCoroutine = StartCoroutine(ShadowTimerControl());
+            }
+        }
+    }
+
+    private void ToggleVisibility(bool newVisibility)
+    {
+        _canCollect = newVisibility;
+        
+        if (_meshRenderer != null)
+        {
+            _meshRenderer.enabled = newVisibility;
+        }
+        
+        if (_collider != null)
+        {
+            _collider.enabled = newVisibility;
+        }
+    }
+    
+    private IEnumerator ShadowTimerControl()
+    {
+        ToggleVisibility(false);
+        yield return new WaitForSeconds(_shadowDuration);
+        ToggleVisibility(true);
+        _respawnCoroutine = null;
+    }
        
 }

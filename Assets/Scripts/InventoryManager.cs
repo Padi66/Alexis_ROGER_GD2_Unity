@@ -9,6 +9,9 @@ public class InventoryManager : MonoBehaviour
     public delegate void CardCollected(AccessCardData card);
     public static event CardCollected OnCardCollected;
     
+    public delegate void CardRemoved(AccessCardData card);
+    public static event CardRemoved OnCardRemoved;
+    
     private void Awake()
     {
         if (Instance == null)
@@ -47,6 +50,8 @@ public class InventoryManager : MonoBehaviour
         if (_collectedCards.Contains(card))
         {
             _collectedCards.Remove(card);
+            OnCardRemoved?.Invoke(card);
+            Debug.Log($"Carte d'accès utilisée: {card.cardName}");
         }
     }
     

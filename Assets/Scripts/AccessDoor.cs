@@ -1,10 +1,11 @@
 using UnityEngine;
-
+using System.Collections;
 public class AccessDoor : MonoBehaviour
 {
     [SerializeField] private AccessCardData _requiredCard;
     [SerializeField] private GameObject _doorVisual;
     [SerializeField] private bool _consumeCard = false;
+    [SerializeField] private float _openDelay = 2f;
     [SerializeField] private Color _lockedColor = Color.red;
     [SerializeField] private Color _unlockedColor = Color.green;
     [SerializeField] private AudioClip _unlockSound;
@@ -13,6 +14,7 @@ public class AccessDoor : MonoBehaviour
     private Renderer _renderer;
     private AudioSource _audioSource;
     private bool _isUnlocked = false;
+    private bool _isOpening = false;
     
     private void Start()
     {
@@ -24,7 +26,7 @@ public class AccessDoor : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !_isUnlocked)
+        if (other.CompareTag("Player") && !_isUnlocked && !_isOpening)
         {
             TryUnlock();
         }
@@ -46,7 +48,7 @@ public class AccessDoor : MonoBehaviour
                 _audioSource.PlayOneShot(_unlockSound);
             }
             
-            OpenDoor();
+            StartCoroutine(OpenDoorWithDelay());
         }
         else
         {
@@ -59,9 +61,12 @@ public class AccessDoor : MonoBehaviour
         }
     }
     
-    private void OpenDoor()
+    private IEnumerator OpenDoorWithDelay()
     {
+        _isOpening = true;
         UpdateVisual();
+        
+        yield return new WaitForSeconds(_openDelay);
         
         if (_doorVisual != null)
         {
