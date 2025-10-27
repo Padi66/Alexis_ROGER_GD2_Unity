@@ -4,6 +4,13 @@ using UnityEngine;
 public class UIController : MonoBehaviour
 {
     [SerializeField] private TMP_Text _scoreText;
+    [SerializeField] private ScoreDatas _scoreDatas;
+
+    private void Start()
+    {
+        _scoreDatas.ScoreValue = 0;
+        UpdateScore(0);
+    }
 
     private void OnEnable()
     {
@@ -15,16 +22,9 @@ public class UIController : MonoBehaviour
         Player_Collect.OnTargetColleted -= UpdateScore;
     }
     
-    
-    private void Star()
-    {
-        UpdateScore(0);
-    }
     public void UpdateScore(int newScore)
     {
         _scoreText.text = "Score : " + newScore.ToString();
-        //_scoreText.text = $"Score : {newScore.ToString()}";
-        
     }
-    
 }
+
