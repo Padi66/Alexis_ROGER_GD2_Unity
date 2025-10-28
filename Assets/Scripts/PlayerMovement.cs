@@ -90,4 +90,23 @@ public class PlayerMovement : MonoBehaviour
             _rb.linearVelocity += Vector3.up * Physics.gravity.y * (_lowJumpMultiplier - 1) * Time.fixedDeltaTime;
         }
     }
+    public float GetSpeed()
+    {
+        return _speed;
+    }
+
+    public void SetSpeed(float speed)
+    {
+        _speed = speed;
+    }
+
+    public float GetJumpForce()
+    {
+        return _jumpForce;
+    }
+
+    public void SetJumpForce(float jumpForce)
+    {
+        _jumpForce = jumpForce;
+    }
 }
