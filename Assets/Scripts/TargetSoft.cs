@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class TargetSoft : MonoBehaviour
 {
-    [SerializeField] private int _targetValue = 1;
+    
+    [SerializeField] private int _targetValue = -1;
     [SerializeField] private float _shadowDuration = 3f;
     [SerializeField] private GameObject _particleEffect;
     
@@ -33,7 +34,7 @@ public class TargetSoft : MonoBehaviour
             Player_Collect playerCollect = other.GetComponent<Player_Collect>();
             if (playerCollect != null)
             {
-                playerCollect.UpdateScore(_targetValue);
+                playerCollect.UpdateScoreWithoutEvent(_targetValue);
                 
                 if (_respawnCoroutine != null)
                 {

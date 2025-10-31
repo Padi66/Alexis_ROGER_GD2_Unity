@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: AccessCardData 2
   m_EditorClassIdentifier: 
   cardName: CarteVerte
-  cardColor: {r: 0, g: 1, b: 0.0665493, a: 1}
+  cardColor: {r: 1, g: 0.996409, b: 0, a: 1}
   cardIcon: {fileID: 0}
