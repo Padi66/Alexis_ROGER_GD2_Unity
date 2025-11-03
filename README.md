@@ -88,3 +88,7 @@ Panel d'options
 Panel de crédits
 Bouton "Jouer" pour lancer le jeu
 Bouton "Quitter" avec support éditeur et build
+
+
+
+Objectif->se qui a été realisé
