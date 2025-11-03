@@ -47,3 +47,4 @@ public class BoostZone : MonoBehaviour
         }
     }
 }
+///GameObject.Find("NomdDeObjet").GetComponent<>
