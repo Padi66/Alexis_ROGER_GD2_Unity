@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+
 public class AccessDoor : MonoBehaviour
 {
     [SerializeField] private AccessCardData _requiredCard;
@@ -8,19 +9,19 @@ public class AccessDoor : MonoBehaviour
     [SerializeField] private float _openDelay = 2f;
     [SerializeField] private Color _lockedColor = Color.red;
     [SerializeField] private Color _unlockedColor = Color.green;
+    
+    [Header("Audio")]
     [SerializeField] private AudioClip _unlockSound;
     [SerializeField] private AudioClip _deniedSound;
+    [SerializeField] [Range(0f, 3f)] private float _soundVolume = 1.5f;
     
     private Renderer _renderer;
-    private AudioSource _audioSource;
     private bool _isUnlocked = false;
     private bool _isOpening = false;
     
     private void Start()
     {
         _renderer = GetComponent<Renderer>();
-        _audioSource = GetComponent<AudioSource>();
-        
         UpdateVisual();
     }
     
@@ -43,18 +44,20 @@ public class AccessDoor : MonoBehaviour
                 InventoryManager.Instance.RemoveCard(_requiredCard);
             }
             
-            if (_unlockSound != null && _audioSource != null)
+            if (_unlockSound != null)
             {
-                _audioSource.PlayOneShot(_unlockSound);
+                AudioSource.PlayClipAtPoint(_unlockSound, transform.position, _soundVolume);
+                Debug.Log("AccessDoor: Door unlocked!");
             }
             
             StartCoroutine(OpenDoorWithDelay());
         }
         else
         {
-            if (_deniedSound != null && _audioSource != null)
+            if (_deniedSound != null)
             {
-                _audioSource.PlayOneShot(_deniedSound);
+                AudioSource.PlayClipAtPoint(_deniedSound, transform.position, _soundVolume);
+                Debug.Log("AccessDoor: Access denied!");
             }
             
             Debug.Log($"Carte d'accès requise: {_requiredCard?.cardName ?? "Non définie"}");

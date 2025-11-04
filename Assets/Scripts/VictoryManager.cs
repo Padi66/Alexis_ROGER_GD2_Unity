@@ -1,11 +1,19 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 public class VictoryManager : MonoBehaviour
 {
     public void RestartGame()
     {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        
+        if (InventoryManager.Instance != null)
+        {
+            InventoryManager.Instance.ClearInventory();
+        }
+        
+        Debug.Log("VictoryManager: Loading MapScene1");
+        SceneManager.LoadScene("MapScene1");
     }
 
     public void QuitGame()

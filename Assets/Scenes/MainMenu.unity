@@ -3441,7 +3441,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc78cba5e7cfb3244a62ec0c1d5d547e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameSceneName: Map_Cours1
+  _gameSceneName: MapScene1
   _mainMenuPanel: {fileID: 1310205647}
   _optionsPanel: {fileID: 1563963251}
   _creditsPanel: {fileID: 0}

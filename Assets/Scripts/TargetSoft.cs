@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class TargetSoft : MonoBehaviour
@@ -32,35 +33,44 @@ public class TargetSoft : MonoBehaviour
             _rigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
         }
         
-        IgnoreOtherTargets();
+        StartCoroutine(IgnoreOtherTargetsDelayed());
         ChooseRandomDirection();
     }
     
-    private void IgnoreOtherTargets()
+    private IEnumerator IgnoreOtherTargetsDelayed()
     {
+        yield return new WaitForSeconds(0.1f);
+        
         TargetSoft[] allTargetSofts = FindObjectsByType<TargetSoft>(FindObjectsSortMode.None);
         foreach (TargetSoft otherTarget in allTargetSofts)
         {
-            if (otherTarget != this && otherTarget._collider != null && _collider != null)
+            if (otherTarget != this && otherTarget != null)
             {
-                Physics.IgnoreCollision(_collider, otherTarget._collider);
+                Collider otherCollider = otherTarget.GetComponent<Collider>();
+                if (otherCollider != null && _collider != null)
+                {
+                    Physics.IgnoreCollision(_collider, otherCollider);
+                }
             }
         }
         
         TargetHard[] allTargetHards = FindObjectsByType<TargetHard>(FindObjectsSortMode.None);
         foreach (TargetHard otherTarget in allTargetHards)
         {
-            Collider otherCollider = otherTarget.GetComponent<Collider>();
-            if (otherCollider != null && _collider != null)
+            if (otherTarget != null)
             {
-                Physics.IgnoreCollision(_collider, otherCollider);
+                Collider otherCollider = otherTarget.GetComponent<Collider>();
+                if (otherCollider != null && _collider != null)
+                {
+                    Physics.IgnoreCollision(_collider, otherCollider);
+                }
             }
         }
     }
     
     private void FixedUpdate()
     {
-        if (!_wasCollected)
+        if (!_wasCollected && _rigidbody != null)
         {
             Vector3 movement = new Vector3(_currentDirection * _moveSpeed, 0, 0);
             _rigidbody.linearVelocity = movement;
@@ -106,7 +116,7 @@ public class TargetSoft : MonoBehaviour
     
     private bool IsWall(GameObject obj)
     {
-        return obj.name.Contains("Wall") || obj.CompareTag("Wall") || obj.layer == LayerMask.NameToLayer("Wall");
+        return obj.name.Contains("Wall") || obj.name.Contains("Ground");
     }
     
     private void ChooseRandomDirection()

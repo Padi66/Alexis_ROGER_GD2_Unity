@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-    private const int CARD_SPAWN_SCORE = 10;
+    private const int CARD_SPAWN_SCORE = 5;
     private const int GAME_OVER_SCORE = -1;
     
     [Header("UI Elements")]
@@ -55,10 +55,15 @@ public class UIController : MonoBehaviour
     {
         _cardSpawned = true;
         
+        if (TargetManager.Instance != null)
+        {
+            TargetManager.Instance.DisableAllTargets();
+        }
+        
         if (_accessCardPrefab != null && _cardSpawnPoint != null)
         {
             Instantiate(_accessCardPrefab, _cardSpawnPoint.position, _cardSpawnPoint.rotation);
-            Debug.Log("Carte d'accès apparue dans la scène !");
+            Debug.Log("Carte d'accès apparue dans la scène ! Targets désactivées.");
         }
         else
         {
@@ -82,4 +87,3 @@ public class UIController : MonoBehaviour
         Time.timeScale = 0f;
     }
 }
-
