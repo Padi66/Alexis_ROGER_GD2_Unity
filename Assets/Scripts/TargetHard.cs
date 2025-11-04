@@ -3,66 +3,108 @@ using UnityEngine;
 
 public class TargetHard : MonoBehaviour
 {
-    private const float RESPAWN_DELAY = 3f;
-    
+    [Header("Score")]
     [SerializeField] private int _targetValue = 1;
     
-    private Vector3 _initialPosition;
-    private Quaternion _initialRotation;
-    private bool _isRespawning;
+    [Header("Movement")]
+    [SerializeField] private float _moveSpeed = 2f;
+    
     private MeshRenderer _meshRenderer;
     private Collider _collider;
+    private Rigidbody _rigidbody;
+    private float _currentDirection;
+    private bool _wasCollected = false;
 
     private void Start()
     {
-        _initialPosition = transform.position;
-        _initialRotation = transform.rotation;
         _meshRenderer = GetComponent<MeshRenderer>();
         _collider = GetComponent<Collider>();
+        _rigidbody = GetComponent<Rigidbody>();
         
-        Debug.Log($"TargetHard initialized at position: {_initialPosition}");
+        if (_rigidbody == null)
+        {
+            _rigidbody = gameObject.AddComponent<Rigidbody>();
+            _rigidbody.freezeRotation = true;
+            _rigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
+        }
+        
+        IgnoreOtherTargets();
+        ChooseRandomDirection();
+    }
+
+    private void IgnoreOtherTargets()
+    {
+        TargetHard[] allTargetHards = FindObjectsByType<TargetHard>(FindObjectsSortMode.None);
+        foreach (TargetHard otherTarget in allTargetHards)
+        {
+            if (otherTarget != this && otherTarget._collider != null && _collider != null)
+            {
+                Physics.IgnoreCollision(_collider, otherTarget._collider);
+            }
+        }
+        
+        TargetSoft[] allTargetSofts = FindObjectsByType<TargetSoft>(FindObjectsSortMode.None);
+        foreach (TargetSoft otherTarget in allTargetSofts)
+        {
+            Collider otherCollider = otherTarget.GetComponent<Collider>();
+            if (otherCollider != null && _collider != null)
+            {
+                Physics.IgnoreCollision(_collider, otherCollider);
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (!_wasCollected)
+        {
+            Vector3 movement = new Vector3(_currentDirection * _moveSpeed, 0, 0);
+            _rigidbody.linearVelocity = movement;
+        }
     }
 
     private void OnCollisionEnter(Collision other)
     {
-        Debug.Log($"TargetHard collision with: {other.gameObject.name}, IsRespawning: {_isRespawning}");
-        
-        if (_isRespawning) return;
-        
-        Player_Collect playerCollect = other.gameObject.GetComponent<Player_Collect>();
-        if (playerCollect != null)
+        if (other.gameObject.CompareTag("Player") && !_wasCollected)
         {
-            Debug.Log($"Player found! Updating score by {_targetValue}");
-            playerCollect.UpdateScoreWithoutEvent(_targetValue);
-            StartCoroutine(RespawnRoutine());
+            _wasCollected = true;
+            
+            Player_Collect playerCollect = other.gameObject.GetComponent<Player_Collect>();
+            if (playerCollect != null)
+            {
+                playerCollect.UpdateScoreWithoutEvent(_targetValue);
+                
+                HideTarget();
+                
+                if (TargetManager.Instance != null)
+                {
+                    TargetManager.Instance.OnTargetCollected(gameObject);
+                }
+            }
         }
-        else
+        else if (IsWall(other.gameObject))
         {
-            Debug.LogWarning($"Player_Collect component not found on {other.gameObject.name}");
+            _currentDirection *= -1;
         }
     }
 
-    private IEnumerator RespawnRoutine()
+    private void HideTarget()
     {
-        _isRespawning = true;
-        Debug.Log("TargetHard hiding...");
-        
         if (_meshRenderer != null)
             _meshRenderer.enabled = false;
         if (_collider != null)
             _collider.enabled = false;
-        
-        yield return new WaitForSeconds(RESPAWN_DELAY);
-        
-        Debug.Log("TargetHard respawning...");
-        transform.position = _initialPosition;
-        transform.rotation = _initialRotation;
-        
-        if (_meshRenderer != null)
-            _meshRenderer.enabled = true;
-        if (_collider != null)
-            _collider.enabled = true;
-            
-        _isRespawning = false;
+        if (_rigidbody != null)
+            _rigidbody.linearVelocity = Vector3.zero;
+    }
+
+    private bool IsWall(GameObject obj)
+    {
+        return obj.name.Contains("Wall") || obj.CompareTag("Wall") || obj.layer == LayerMask.NameToLayer("Wall");
+    }
+
+    private void ChooseRandomDirection()
+    {
+        _currentDirection = UnityEngine.Random.value < 0.5f ? -1f : 1f;
     }
 }

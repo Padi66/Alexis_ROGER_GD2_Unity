@@ -3,24 +3,25 @@ using UnityEngine;
 
 public class UIController : MonoBehaviour
 {
-    private const int VICTORY_SCORE = 10;
+    private const int CARD_SPAWN_SCORE = 10;
     private const int GAME_OVER_SCORE = -1;
     
+    [Header("UI Elements")]
     [SerializeField] private TMP_Text _scoreText;
     [SerializeField] private ScoreDatas _scoreDatas;
-    [SerializeField] private GameObject _victoryPanel;
     [SerializeField] private GameObject _gameOverPanel;
     
-    private bool _victoryAchieved;
+    [Header("Access Card Spawn")]
+    [SerializeField] private GameObject _accessCardPrefab;
+    [SerializeField] private Transform _cardSpawnPoint;
+    
+    private bool _cardSpawned;
     private bool _gameOverAchieved;
 
     private void Start()
     {
         _scoreDatas.ScoreValue = 0;
         UpdateScore(0);
-        
-        if (_victoryPanel != null)
-            _victoryPanel.SetActive(false);
         
         if (_gameOverPanel != null)
             _gameOverPanel.SetActive(false);
@@ -40,9 +41,9 @@ public class UIController : MonoBehaviour
     {
         _scoreText.text = "Score : " + newScore.ToString();
         
-        if (newScore >= VICTORY_SCORE && !_victoryAchieved)
+        if (newScore >= CARD_SPAWN_SCORE && !_cardSpawned)
         {
-            ShowVictory();
+            SpawnAccessCard();
         }
         else if (newScore <= GAME_OVER_SCORE && !_gameOverAchieved)
         {
@@ -50,16 +51,19 @@ public class UIController : MonoBehaviour
         }
     }
 
-    private void ShowVictory()
+    private void SpawnAccessCard()
     {
-        _victoryAchieved = true;
+        _cardSpawned = true;
         
-        if (_victoryPanel != null)
+        if (_accessCardPrefab != null && _cardSpawnPoint != null)
         {
-            _victoryPanel.SetActive(true);
+            Instantiate(_accessCardPrefab, _cardSpawnPoint.position, _cardSpawnPoint.rotation);
+            Debug.Log("Carte d'accès apparue dans la scène !");
         }
-        
-        Time.timeScale = 0f;
+        else
+        {
+            Debug.LogWarning("AccessCardPrefab ou CardSpawnPoint non assigné dans UIController !");
+        }
     }
 
     private void ShowGameOver()
