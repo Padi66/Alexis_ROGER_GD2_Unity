@@ -38,7 +38,6 @@ public class AccessCard : MonoBehaviour
         StartCoroutine(IgnoreTargetsDelayed());
     }
     
-    // Désactive les collisions entre la carte et toutes les cibles du jeu
     // Le délai permet de s'assurer que tous les objets sont bien initialisés
     private IEnumerator IgnoreTargetsDelayed()
     {
@@ -48,34 +47,6 @@ public class AccessCard : MonoBehaviour
         // Récupère le collider de la carte
         Collider cardCollider = GetComponent<Collider>();
         if (cardCollider == null) yield break;
-        
-        // Ignore les collisions avec toutes les cibles dures (TargetHard)
-        TargetHard[] allTargetHards = FindObjectsByType<TargetHard>(FindObjectsSortMode.None);
-        foreach (TargetHard target in allTargetHards)
-        {
-            if (target != null)
-            {
-                Collider targetCollider = target.GetComponent<Collider>();
-                if (targetCollider != null)
-                {
-                    Physics.IgnoreCollision(cardCollider, targetCollider);
-                }
-            }
-        }
-        
-        // Ignore les collisions avec toutes les cibles molles (TargetSoft)
-        TargetSoft[] allTargetSofts = FindObjectsByType<TargetSoft>(FindObjectsSortMode.None);
-        foreach (TargetSoft target in allTargetSofts)
-        {
-            if (target != null)
-            {
-                Collider targetCollider = target.GetComponent<Collider>();
-                if (targetCollider != null)
-                {
-                    Physics.IgnoreCollision(cardCollider, targetCollider);
-                }
-            }
-        }
     }
     
     // Fait tourner la carte continuellement autour de l'axe vertical (Y)

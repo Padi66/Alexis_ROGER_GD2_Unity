@@ -1293,6 +1293,7 @@ MonoBehaviour:
   _unlockedColor: {r: 0, g: 1, b: 0, a: 1}
   _unlockSound: {fileID: 0}
   _deniedSound: {fileID: 0}
+  _soundVolume: 1.5
 --- !u!65 &500740053
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3109,7 +3110,7 @@ Transform:
   m_GameObject: {fileID: 933039537}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 100.37, y: 4.80253, z: -38.62}
+  m_LocalPosition: {x: 102.54, y: 4.80253, z: -32.46}
   m_LocalScale: {x: 1, y: 0.1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3807,8 +3808,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::VictoryZone
   _victoryPanel: {fileID: 506237383}
-  _requiresAccessCard: 0
-  _requiredCard: {fileID: 0}
 --- !u!4 &1314675669
 Transform:
   m_ObjectHideFlags: 0
@@ -11119,6 +11118,7 @@ MonoBehaviour:
   _unlockedColor: {r: 0, g: 1, b: 0, a: 1}
   _unlockSound: {fileID: 0}
   _deniedSound: {fileID: 0}
+  _soundVolume: 1.5
 --- !u!65 &2067733300
 BoxCollider:
   m_ObjectHideFlags: 0
