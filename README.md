@@ -50,11 +50,30 @@ Pour cela, j’ai créé un Target Manager qui gère l’ensemble des targets, l
 J’ai également ajouté une plaque de pression qui, lorsqu’elle est activée, fait disparaître un mur de sa liste.
 Le mur concerné est contrôlé par un script dédié, qui gère sa disparition et sa réapparition en fonction de l’état de la plaque.
 
-Enfin, j’ai intégré des zones de dialogue où le joueur déclenche l’apparition de messages à l’écran.
+J’ai intégré des zones de dialogue où le joueur déclenche l’apparition de messages à l’écran.
 Ces zones sont conçues pour éviter que plusieurs dialogues ne se superposent.
 Elles gèrent :
 le déclenchement lors du passage du joueur,
 le délai entre chaque message,
 la désactivation automatique après lecture, afin d’empêcher qu’un même message n’apparaisse deux fois.
 
+Une zone de mort (DeathBox) détecte la chute du joueur hors de la carte.
+Le joueur est alors téléporté instantanément à un point de respawn (RespawnBox).
+Les vitesses du Rigidbody sont réinitialisées pour éviter tout comportement anormal.
+Ce système assure une reprise fluide du jeu après chaque chute.
+
+La caméra suit le joueur avec un effet de smoothing pour un mouvement fluide.
+Un offset configurable permet d’ajuster sa position.
+Elle s’oriente automatiquement vers le joueur.
+
+Le HUD affiche en temps réel le score et le nombre de cartes d’accès collectées.
+Deux panneaux de fin de partie sont présents :
+Victoire : s’affiche à la fin du jeu
+Game Over : s’affiche à un score ≤ -1.
+Chaque écran propose des boutons "Redémarrer" et "Quitter", et met le jeu en pause (Time.timeScale = 0).
+
+Le menu principal permet de naviguer entre plusieurs panels :
+Accueil avec bouton "Jouer",
+Options pour les réglages,
+et Quitter, fonctionnel dans l’éditeur et le build.
 
