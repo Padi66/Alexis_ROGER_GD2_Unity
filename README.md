@@ -75,5 +75,5 @@ Chaque écran propose des boutons "Redémarrer" et "Quitter", et met le jeu en p
 Le menu principal permet de naviguer entre plusieurs panels :
 Accueil avec bouton "Jouer",
 Options pour les réglages,
-et Quitter, fonctionnel dans l’éditeur et le build.
+et Quitter, fonctionnel dans l’éditeur et le build. 
 
