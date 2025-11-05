@@ -1356,6 +1356,7 @@ MonoBehaviour:
   _unlockedColor: {r: 0, g: 1, b: 0, a: 1}
   _unlockSound: {fileID: 0}
   _deniedSound: {fileID: 0}
+  _soundVolume: 1.5
 --- !u!65 &500740053
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3126,6 +3127,14 @@ PrefabInstance:
       propertyPath: _cardData
       value: 
       objectReference: {fileID: 11400000, guid: 2b98b780820f8a24898ff669d2daedac, type: 2}
+    - target: {fileID: 8600898000475156454, guid: 68066686f3c0b3447ad8c725942bafa6, type: 3}
+      propertyPath: _soundVolume
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8600898000475156454, guid: 68066686f3c0b3447ad8c725942bafa6, type: 3}
+      propertyPath: _collectSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 620bc257568e1ec4e817f0a76c188eaf, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9725,6 +9734,7 @@ MonoBehaviour:
   _unlockedColor: {r: 0, g: 1, b: 0, a: 1}
   _unlockSound: {fileID: 0}
   _deniedSound: {fileID: 0}
+  _soundVolume: 1.5
 --- !u!65 &1860806751
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -10590,8 +10600,9 @@ MonoBehaviour:
   _openDelay: 2
   _lockedColor: {r: 1, g: 0, b: 0, a: 1}
   _unlockedColor: {r: 0, g: 1, b: 0, a: 1}
-  _unlockSound: {fileID: 0}
+  _unlockSound: {fileID: 8300000, guid: caaec69b40c745541962a0fdebf02990, type: 3}
   _deniedSound: {fileID: 0}
+  _soundVolume: 1.5
 --- !u!65 &2067733300
 BoxCollider:
   m_ObjectHideFlags: 0
