@@ -1,94 +1,60 @@
 # BRASSART_GD2_Unity_RollABall
 
-Systèmes de Gameplay Implémentés
-1. Système de Déplacement du Joueur
-Déplacement en 3D avec contrôles ZQSD
-Système de saut avec détection du sol
-Gravité personnalisée avec multiplicateurs de chute
-Vitesse et force de saut modifiables
-Gestion via Rigidbody et physique Unity
-2. Système de Score
-Système de score dynamique avec ScriptableObject (ScoreDatas)
-Affichage en temps réel avec TextMeshPro
-Évènements pour synchroniser le score entre systèmes
-Conditions de victoire (score ≥ 10)
-Conditions de défaite (score ≤ -1)
-3. Système de Collectibles
-Cibles 1 (TargetHard)
-Donnent +1 point au score
-Se régénèrent après 3 secondes
-Collision basée sur OnCollisionEnter
-Cibles 2 (TargetSoft)
-Retirent 1 point au score
-Disparaissent temporairement pendant 3 secondes
-Collision basée sur trigger
-Système de Spawn Dynamique
-Génération aléatoire de cibles
-Maximum de 5 cibles sur la carte simultanément
-Respawn automatique quand une cible est collectée
-Points de spawn multiples avec détection d'occupation
-4. Système d'Inventaire et Cartes d'Accès
-Gestion centralisée avec pattern Singleton
-3 types de cartes d'accès configurables (AccessCardData)
-Système de collection et retrait de cartes
-Évènements pour notifier la collecte/utilisation
-Interface utilisateur pour afficher le nombre de cartes
-5. Système de Portes
-Portes nécessitant des cartes d'accès spécifiques
-Option pour consommer ou garder la carte après utilisation
-Délai d'ouverture configurable
-Feedback visuel (changement de couleur rouge→vert)
-Feedback audio (sons de déverrouillage/refus)
-6. Système de Boost
-Zones qui augmentent temporairement la vitesse et le saut
-Multiplicateurs configurables pour vitesse et saut
-Durée de boost paramétrable (5 secondes par défaut)
-Feedback visuel avec couleurs personnalisées
-7. Système de Plaques de Pression
-Activation au contact du joueur
-Contrôle de murs temporaires qui disparaissent
-Système de cooldown configurable (1 seconde)
-Feedback visuel avec changement de matériau
-Support pour contrôler plusieurs murs simultanément
-8. Murs Dynamiques
-Murs Disparaissants
-Disparaissent pendant une durée définie (5 secondes)
-Réapparaissent automatiquement
-Désactivation visuelle et des collisions
-Spawn Progressif de Murs
-Génération de nouveaux murs quand une cible est collectée
-Points de spawn prédéfinis
-Arrêt automatique quand tous les points sont utilisés
-9. Système de Mort et Respawn
-Zone de mort (DeathBox) qui détecte la chute du joueur
-Point de respawn (RespawnBox)
-Réinitialisation des vélocités du Rigidbody
-Téléportation instantanée au point de spawn
-10. Système de Caméra
-Caméra qui suit le joueur avec smoothing
-Offset configurable
-Rotation automatique vers le joueur
-Zoom avec molette de souris (min: 3, max: 15)
-Vitesse de zoom paramétrable
-11. Interface Utilisateur (UI)
-HUD de Jeu
-Affichage du score en temps réel
-Compteur de cartes d'accès collectées
-Écran de Victoire
-Panel qui s'affiche au score ≥ 10
-Boutons "Redémarrer" et "Quitter"
-Pause du jeu (Time.timeScale = 0)
-Écran de Game Over
-Panel qui s'affiche au score ≤ -1
-Boutons "Redémarrer" et "Quitter"
-Pause du jeu
-12. Système de Menu Principal
-Menu principal avec navigation entre panels
-Panel d'options
-Panel de crédits
-Bouton "Jouer" pour lancer le jeu
-Bouton "Quitter" avec support éditeur et build
+Objectif initial du projet
+
+L’objectif initial du projet était de réaliser un jeu dans lequel le joueur contrôlerait une plateforme sur laquelle se trouve une balle. Celle-ci devait rouler lorsque la plateforme s’inclinait. Le joueur aurait ainsi dû faire preuve d’adresse pour faire parcourir un chemin à la balle.
+Le jeu devait également inclure :
+un système de cartes d’accès à récupérer dans le niveau,
+des zones de tremplin permettant à la balle de sauter par-dessus des obstacles.
 
 
+Début du développement
 
-Objectif->se qui a été realisé
+Au début du développement, je me suis concentré sur la création de la plateforme ("player").
+Problème rencontré : le script ne fonctionnait pas, la plateforme ne bougeait pas.
+L’idée de base était qu’une balle se déplace dans un monde fermé, en récupérant des items pour ouvrir des portes.
+J’ai géré plusieurs paramètres :
+les limites d’inclinaison (maximum et minimum),
+la vitesse,
+la lecture des inputs (GetInput();) et leur application (ApplyTilt();),
+le calcul du sens d’inclinaison (float tiltX = _verticalInput * _maxTiltAngle;),
+la conversion des angles en rotation (_targetRotation = Quaternion.Euler(tiltX, 0f, tiltZ);).
+
+Ce système me semblait plus adapté que l’utilisation directe de Vector3.
+Cependant, malgré ces essais, la plateforme ne bougeait toujours pas. Après avoir perdu plusieurs heures à chercher le problème, j’ai finalement décidé de partir sur une approche plus simple : le joueur contrôle directement la balle.
+
+
+Exécution du projet
+
+J’ai commencé par reprendre le code vu en cours pour le contrôle de la balle.
+Ensuite, j’ai ajusté la caméra pour créer un effet de zoom (qui, après les phases de test, ne fonctionnait plus correctement) et mis en place un système de points positifs et négatifs afin de créer un premier système de game over.
+
+Je me suis ensuite attaqué aux cartes d’accès et à la porte qui s’ouvre lorsqu’on possède la bonne carte.
+Pour cela :
+
+J’ai créé un système d’inventaire qui stocke les cartes d’accès lorsqu’elles sont récupérées.
+La carte tourne sur elle-même pour attirer l’œil :
+transform.Rotate(Vector3.up, _rotationSpeed * Time.deltaTime);
+Lorsqu’un objet entre dans son trigger, la carte est ajoutée à l’inventaire puis détruite.
+Pour la porte d’accès, elle détecte si l’objet entrant possède le tag "Player" et la carte correspondante. Si c’est le cas, elle consomme la carte de l’inventaire et disparaît.
+
+J’ai également ajouté :
+un système de saut avec la touche Espace, en vérifiant que la balle est bien au sol grâce à un raycast, avant d’appliquer une force verticale ;
+une force de gravité supplémentaire pour rendre la chute plus rapide et réaliste ;
+une zone de boost, qui augmente temporairement la vitesse et la hauteur de saut de la balle.
+Pour cela, je stocke les valeurs avant le boost, je les multiplie, puis je les réinitialise après un certain temps.
+
+J’ai mis en place un système de déplacement horizontal des cibles (targets) ainsi qu’un système de points positifs et négatifs.
+Pour cela, j’ai créé un Target Manager qui gère l’ensemble des targets, leurs points de spawn et de respawn. Ce système permet d’organiser le comportement global des cibles et de centraliser leur gestion.
+
+J’ai également ajouté une plaque de pression qui, lorsqu’elle est activée, fait disparaître un mur de sa liste.
+Le mur concerné est contrôlé par un script dédié, qui gère sa disparition et sa réapparition en fonction de l’état de la plaque.
+
+Enfin, j’ai intégré des zones de dialogue où le joueur déclenche l’apparition de messages à l’écran.
+Ces zones sont conçues pour éviter que plusieurs dialogues ne se superposent.
+Elles gèrent :
+le déclenchement lors du passage du joueur,
+le délai entre chaque message,
+la désactivation automatique après lecture, afin d’empêcher qu’un même message n’apparaisse deux fois.
+
+
